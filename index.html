@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Include embedding library -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/embed-js/1.18.1/embed.min.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mindsets Webhook Sender</title>
+  <title>Webhook Sender</title>
 
-  <link rel="icon" href="https://dblegends.net/assets/card_icons/BChaIco_0573_GogetaSS1_573.webp">
-  
+  <!-- Include embedding library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/embed-js/1.18.1/embed.min.js"></script>
+
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -16,6 +15,9 @@
       margin: 20px auto;
       background-color: #2c2c2c;
       color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     }
 
     h1 {
@@ -58,91 +60,41 @@
       border-radius: 5px;
       cursor: pointer;
       transition: background 0.3s;
+      display: block;
+      margin: 0 auto;
     }
 
     button:hover {
       background: #005580;
     }
 
-    #embedBuilder, #profileEditor {
+    #embedBuilder {
       padding: 20px;
       background-color: #3b3b3b;
       border: 1px solid #444;
       border-radius: 5px;
-      margin-top: 20px;
     }
 
-    #embedPreview {
-      margin-top: 20px;
-      padding: 20px;
-      background-color: #3b3b3b;
-      border: 1px solid #444;
-      border-radius: 5px;
-      overflow: hidden;
-      transition: background 0.3s;
-    }
-
-    .embed-container {
-      border: 1px solid #444;
-      border-radius: 5px;
-      overflow: hidden;
-      background-color: #2c2c2c;
-      padding: 20px;
-      margin-top: 20px;
-    }
-
-    .embed-title {
-      color: #ffffff;
-      font-size: 22px;
-      margin-bottom: 10px;
-    }
-
-    .embed-description, .embed-footer, .embed-fields {
-      color: #bbb;
-      margin-bottom: 10px;
-    }
-
-    .error-message {
-      color: #ff4444;
-      margin-top: 10px;
-    }
-
-    #colorPicker {
-      width: 100%;
-      padding: 10px;
-      box-sizing: border-box;
-      background-color: #3b3b3b;
-      border: 1px solid #444;
-      border-radius: 5px;
-      margin-bottom: 15px;
-    }
-
-    #profileName, #profileImage {
-      width: calc(50% - 8px);
-      margin-right: 8px;
-    }
   </style>
 
 </head>
 
 <body>
 
-  <h1>Mindsets Webhook Sender</h1>
-
-  <div>
-    <label for="urlInput">Webhook URL:</label>
-    <input type="url" id="urlInput" placeholder="Enter webhook URL" required>
-  </div>
+  <h1>Webhook Sender</h1>
 
   <div id="embedBuilder">
+    <label for="urlInput">Webhook URL:</label>
+    <input type="url" id="urlInput" placeholder="Enter webhook URL" required>
+
     <label for="embedTitle">Title:</label>
     <input type="text" id="embedTitle" placeholder="Enter title">
 
     <label for="embedDescription">Description:</label>
     <textarea id="embedDescription" placeholder="Enter description"></textarea>
 
-    <label for="colorPicker">Color:</label>
-    <input type="color" id="colorPicker" value="#0077cc">
+    <label for="embedColor">Color (Decimal):</label>
+    <input type="number" id="embedColor" placeholder="Enter color">
 
     <label for="embedImage">Image URL:</label>
     <input type="url" id="embedImage" placeholder="Enter image URL">
@@ -160,44 +112,27 @@
     <input type="url" id="embedAuthorIcon" placeholder="Enter author icon URL">
 
     <!-- Additional embed fields -->
-    <div id="embedFields" class="embed-fields">
+    <div id="embedFields">
       <label for="embedField1Name">Field 1 Name:</label>
       <input type="text" id="embedField1Name" placeholder="Enter field name">
 
       <label for="embedField1Value">Field 1 Value:</label>
       <input type="text" id="embedField1Value" placeholder="Enter field value">
-
-      <!-- Add more fields as needed -->
     </div>
+
+    <button id="sendButton">Send Embed</button>
   </div>
 
-  <div id="profileEditor">
-    <h2>Profile Editor</h2>
-    <label for="profileName">Profile Name:</label>
-    <input type="text" id="profileName" placeholder="Enter profile name">
+  <script>
+    const sendButton = document.getElementById('sendButton');
 
-    <label for="profileImage">Profile Image URL:</label>
-    <input type="url" id="profileImage" placeholder="Enter profile image URL">
-  </div>
+    sendButton.addEventListener('click', () => {
+      const url = document.getElementById('urlInput').value;
 
-  <button id="sendButton">Send Embed</button>
-
-  <div id="embedPreview" class="embed-container"></div>
-  <div id="errorMessage" class="error-message"></div>
-
-<script>
-  const sendButton = document.getElementById('sendButton');
-  const embedPreview = document.getElementById('embedPreview');
-  const errorMessage = document.getElementById('errorMessage');
-
-  sendButton.addEventListener('click', async () => {
-    const url = document.getElementById('urlInput').value;
-
-    try {
       const embed = {
         title: document.getElementById('embedTitle').value,
         description: document.getElementById('embedDescription').value,
-        color: document.getElementById('colorPicker').value,
+        color: document.getElementById('embedColor').value || 0,
         image: { url: document.getElementById('embedImage').value },
         footer: {
           text: document.getElementById('embedFooter').value,
@@ -216,35 +151,15 @@
         ],
       };
 
-      // Use EmbedJS library to render the embed
-      EmbedJS(embedPreview, {
-        embeds: [embed]
-      });
-
-      // Send webhook with embed in Discohook format
-      const payload = {
-        content: '',
-        username: '',
-        avatar_url: '',
-        embeds: [embed],
-      };
-
-      const response = await fetch(url, {
+      fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+          embeds: [embed]
+        })
       });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      errorMessage.textContent = ''; // Clear any previous error messages
-    } catch (error) {
-      errorMessage.textContent = `Error: ${error.message}`;
-    }
-  });
-</script>
+    });
+  </script>
 
 </body>
 </html>
