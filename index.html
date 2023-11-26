@@ -10,30 +10,38 @@
 
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       max-width: 800px;
-      margin: 0 auto;
-      background-color: #1e1e1e;
+      margin: 20px auto;
+      background-color: #2c2c2c;
       color: #fff;
     }
 
     h1 {
       color: #0077cc;
+      text-align: center;
+      margin-bottom: 20px;
     }
 
     label {
       display: block;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
     }
 
     input, textarea {
-      width: 100%;
-      padding: 8px;
+      width: calc(100% - 16px);
+      padding: 10px;
       margin-bottom: 15px;
       box-sizing: border-box;
-      background-color: #2d2d2d;
+      background-color: #3b3b3b;
       border: 1px solid #444;
       color: #fff;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    input:focus, textarea:focus {
+      background-color: #4b4b4b;
     }
 
     textarea {
@@ -42,12 +50,13 @@
     }
 
     button {
-      padding: 10px 15px;
+      padding: 12px 20px;
       background: #0077cc;
       color: #fff;
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      transition: background 0.3s;
     }
 
     button:hover {
@@ -55,19 +64,46 @@
     }
 
     #embedBuilder {
-      margin-top: 15px;
-      padding: 10px;
-      background-color: #2d2d2d;
+      padding: 20px;
+      background-color: #3b3b3b;
       border: 1px solid #444;
       border-radius: 5px;
     }
 
     #embedPreview {
-      margin-top: 15px;
-      padding: 10px;
-      background-color: #2d2d2d;
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #3b3b3b;
       border: 1px solid #444;
       border-radius: 5px;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+
+    .embed-container {
+      border: 1px solid #444;
+      border-radius: 5px;
+      overflow: hidden;
+      background-color: #2c2c2c;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .embed-title {
+      color: #ffffff;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .embed-description {
+      color: #bbb;
+      margin-bottom: 10px;
+    }
+
+    .embed-footer {
+      color: #bbb;
+      font-style: italic;
+      margin-top: 15px;
     }
   </style>
 
@@ -113,12 +149,14 @@
 
   <button id="sendButton">Send Embed</button>
 
-  <div id="embedPreview"></div>
+  <div id="embedPreview">
+    <div class="embed-container" id="actualEmbedPreview"></div>
+  </div>
 
   <script>
     const sendButton = document.getElementById('sendButton');
     const embedBuilder = document.getElementById('embedBuilder');
-    const embedPreview = document.getElementById('embedPreview');
+    const actualEmbedPreview = document.getElementById('actualEmbedPreview');
 
     sendButton.addEventListener('click', () => {
 
@@ -141,6 +179,26 @@
         // Add more fields as needed
       };
 
+      // Clear previous embed preview
+      actualEmbedPreview.innerHTML = '';
+
+      // Create and append elements to display the actual embed preview
+      const embedTitle = document.createElement('div');
+      embedTitle.classList.add('embed-title');
+      embedTitle.textContent = embed.title || 'No Title';
+
+      const embedDescription = document.createElement('div');
+      embedDescription.classList.add('embed-description');
+      embedDescription.textContent = embed.description || 'No Description';
+
+      const embedFooter = document.createElement('div');
+      embedFooter.classList.add('embed-footer');
+      embedFooter.textContent = embed.footer.text || '';
+
+      actualEmbedPreview.appendChild(embedTitle);
+      actualEmbedPreview.appendChild(embedDescription);
+      actualEmbedPreview.appendChild(embedFooter);
+
       // Send webhook with embed
       fetch(url, {
         method: 'POST',
@@ -149,11 +207,6 @@
           embeds: [embed]
         })
       });
-
-      // Display embed preview
-      embedPreview.innerHTML = `<h3>Embed Preview:</h3>${JSON.stringify(embed, null, 2)}`;
-      embedjs(embedPreview); // Use embed-js library to render the embed
-
     });
   </script>
 
