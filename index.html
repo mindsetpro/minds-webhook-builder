@@ -3,30 +3,48 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Webhook Sender</title>
 
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-
+  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/embed-js/1.18.1/embed.min.js"></script>
 
   <style>
     body {
       display: flex;
       flex-direction: column;
-      align-items: center;    
+      align-items: center;
       padding: 20px;
-      max-width: 600px;
+      max-width: 800px;
       margin: 0 auto;
+      background-color: #303030;
+      color: white;
     }
     
-    .card {
-      width: 100%;
+    h1 {
+      color: #eee;
+    }
+    
+    .input-field label {
+      color: #eee;
+    }
+    
+    .input-field input,
+    .input-field textarea {
+      color: white;
+      border-bottom: 1px solid #555;
+    }
+    
+    .btn {
+      background-color: #1a73e8;
     }
     
     #preview {
       padding: 20px;
-      background: #f5f5f5;  
+      background: #252525;
+      color: #eee;
       border-radius: 4px;
     }
     
@@ -36,99 +54,155 @@
 
 <body>
 
-  <h1>Webhook Sender</h1>
-
-  <div class="card">
+  <!-- Webhook Profile -->
   
+  <div class="card">
     <div class="card-content">
     
       <div class="input-field">
-        <input id="urlInput" type="url" required>
-        <label for="urlInput">Webhook URL</label>
-      </div>
-      
-      <div class="input-field">
-        <input id="embedTitle" type="text">
-        <label for="embedTitle">Title</label>
+        <input id="webhookName" type="text">
+        <label for="webhookName">Webhook Name</label>
       </div>
 
       <div class="input-field">
-        <textarea id="embedDescription" class="materialize-textarea"></textarea>
-        <label for="embedDescription">Description</label>
-      </div>
-
-      <div class="input-field">
-        <input id="embedColor" type="text">
-        <label for="embedColor">Color</label>  
-      </div>
-      
-      <div class="input-field">
-        <input id="embedImage" type="text">
-        <label for="embedImage">Image URL</label>
-      </div>
-      
-      <div id="preview"></div>
-      
-      <button class="btn waves-effect waves-light" id="sendButton">
-        Send
-        <i class="material-icons right">send</i>
-      </button>
-      
+        <input id="webhookAvatar" type="text">
+        <label for="webhookAvatar">Avatar URL</label>
+      </div>  
+   
     </div>
-
   </div>
+  
+  <!-- Embed Builders -->
+  
+  <div id="embedBuilders"></div>
+  
+  <div id="preview"></div>
 
+  <button class="btn" id="sendButton">
+    Send Webhook
+  </button>
+
+  <!-- Scripts -->
+  
   <script>
-    
-    // Get input values  
-    function getEmbedData() {
-    
-      return {
-        title: document.getElementById('embedTitle').value,
-        description: document.getElementById('embedDescription').value,
-        color: document.getElementById('embedColor').value, 
-        image: {
-          url: document.getElementById('embedImage').value  
-        }
-      }
-      
+
+    // Embed Builder Template 
+    const embedFormTemplate = () => {
+     return `
+        <div class="card">
+        
+          <div class="card-content">
+
+            <div class="input-field">
+              <input type="text" id="embedTitle">
+              <label for="embedTitle">Title</label>
+            </div>
+
+            <div class="input-field">
+              <textarea id="embedDescription" class="materialize-textarea"></textarea>
+              <label for="embedDescription">Description</label>
+            </div>
+
+            <div class="input-field">
+              <input type="text" id="embedColor">
+              <label for="embedColor">Color</label> 
+            </div>
+            
+            <div class="input-field">
+              <input type="text" id="embedImage">  
+              <label for="embedImage">Image URL</label>
+            </div>
+            
+            <div class="input-field">
+              <input type="text" id="embedAuthor">
+              <label for="embedAuthor">Author</label>
+            </div>  
+            
+            <div class="input-field">
+              <input type="text" id="embedFooter">
+              <label for="embedFooter">Footer Text</label>  
+            </div>
+            
+          </div>
+          
+        </div>  
+      `;
     }
+
+    // Generate embed builders
+    let embedHTML = '';
     
-    // Preview embed
+    for (let i = 1; i <= 2; i++) {
+      const embedId = 'embed-' + i;  
+      const html = embedFormTemplate();
+      embedHTML += html.replace(/id="/g, `id="${embedId}-`); 
+    }
+
+    document.getElementById('embedBuilders').innerHTML = embedHTML;
+    
+    // Embed preview
     function previewEmbed() {
     
-      let embed = getEmbedData();
-      
-      document.getElementById('preview').innerHTML = '';
-      
-      embedJS.render(document.getElementById('preview'), embed);
+      // Render embed preview
       
     }
     
-    // Send webhook
-    function sendWebhook() {
+// Get embed data 
+function getEmbedData(id) {
 
-      let url = document.getElementById('urlInput').value;  
-      let embed = getEmbedData();
-      
-      fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          embeds: [embed]  
-        })
-      });
-      
+  const embed = {
+    title: document.getElementById(id + '-embedTitle').value,
+    description: document.getElementById(id + '-embedDescription').value,
+    color: document.getElementById(id + '-embedColor').value,
+    image: {
+      url: document.getElementById(id + '-embedImage').value
+    },
+    author: {
+      name: document.getElementById(id + '-embedAuthor').value  
+    },
+    footer: {
+      text: document.getElementById(id + '-embedFooter').value
     }
-    
-    // Set up events
-    document.getElementById('sendButton').addEventListener('click', sendWebhook);
-    
-    document.getElementById('embedTitle').addEventListener('keyup', previewEmbed);
-    document.getElementById('embedDescription').addEventListener('keyup', previewEmbed);
-    document.getElementById('embedColor').addEventListener('change', previewEmbed);
-    document.getElementById('embedImage').addEventListener('change', previewEmbed);
-    
+  }
+
+  return embed;
+
+}
+
+// Send webhook
+function sendWebhook() {
+
+  const url = document.getElementById('webhookURL').value;
+
+  const embeds = [];
+
+  // Loop through embeds and add to array
+  for (let i = 1; i <= 2; i++) { 
+    const embed = getEmbedData('embed-' + i);
+    embeds.push(embed);
+  }
+
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      username: document.getElementById('webhookName').value,  
+      avatar_url: document.getElementById('webhookAvatar').value,
+      embeds: embeds
+    })
+  })
+  .then(res => {
+    console.log('Success');
+  })
+  .catch(err => {
+    console.log('Error:', err);
+  });
+
+}
+
+document.getElementById('sendButton').addEventListener('click', sendWebhook);
     
   </script>
 
