@@ -1,91 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Webhook Sender</title>
 
-  <!-- Include embedding library -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/embed-js/1.18.1/embed.min.js"></script>
-  <!-- Include Spectrum Color Picker library -->
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.1/spectrum.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.1/spectrum.min.js"></script>
 
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      max-width: 800px;
-      margin: 20px auto;
-      background-color: #2c2c2c;
-      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;    
       padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    }
-
-    h1 {
-      color: #0077cc;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-    }
-
-    input, textarea, select {
-      width: calc(100% - 16px);
-      padding: 10px;
-      margin-bottom: 15px;
-      box-sizing: border-box;
-      background-color: #3b3b3b;
-      border: 1px solid #444;
-      color: #fff;
-      border-radius: 5px;
-      transition: background-color 0.3s;
-    }
-
-    input:focus, textarea:focus, select:focus {
-      background-color: #4b4b4b;
-    }
-
-    textarea {
-      height: 150px;
-      resize: vertical;
-    }
-
-    button {
-      padding: 12px 20px;
-      background: #0077cc;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-      display: block;
+      max-width: 600px;
       margin: 0 auto;
     }
-
-    button:hover {
-      background: #005580;
+    
+    .card {
+      width: 100%;
     }
-
-    #embedBuilder {
+    
+    #preview {
       padding: 20px;
-      background-color: #3b3b3b;
-      border: 1px solid #444;
-      border-radius: 5px;
+      background: #f5f5f5;  
+      border-radius: 4px;
     }
-
-    #components {
-      margin-top: 20px;
-      padding: 20px;
-      background-color: #3b3b3b;
-      border: 1px solid #444;
-      border-radius: 5px;
-    }
-
+    
   </style>
 
 </head>
@@ -94,173 +38,100 @@
 
   <h1>Webhook Sender</h1>
 
-  <div>
-    <label for="urlInput">Webhook URL:</label>
-    <input type="url" id="urlInput" placeholder="Enter webhook URL" required>
-  </div>
-
-  <div id="embedBuilder">
-    <label for="embedTitle">Title:</label>
-    <input type="text" id="embedTitle" placeholder="Enter title">
-
-    <label for="embedDescription">Description:</label>
-    <textarea id="embedDescription" placeholder="Enter description"></textarea>
-
-    <label for="embedColor">Color:</label>
-    <input type="text" id="embedColor" placeholder="Select color" class="color-picker">
-
-    <label for="embedImage">Image URL:</label>
-    <input type="url" id="embedImage" placeholder="Enter image URL">
-
-    <label for="embedFooter">Footer:</label>
-    <input type="text" id="embedFooter" placeholder="Enter footer text">
-
-    <label for="embedFooterIcon">Footer Icon URL:</label>
-    <input type="url" id="embedFooterIcon" placeholder="Enter footer icon URL">
-
-    <label for="embedAuthor">Author:</label>
-    <input type="text" id="embedAuthor" placeholder="Enter author name">
-
-    <label for="embedAuthorIcon">Author Icon URL:</label>
-    <input type="url" id="embedAuthorIcon" placeholder="Enter author icon URL">
-
-    <!-- Additional embed fields -->
-    <div id="embedFields">
-      <label for="embedField1Name">Field 1 Name:</label>
-      <input type="text" id="embedField1Name" placeholder="Enter field name">
-
-      <label for="embedField1Value">Field 1 Value:</label>
-      <input type="text" id="embedField1Value" placeholder="Enter field value">
-    </div>
-
-    <button id="sendButton">Send Embed</button>
-  </div>
-
-<div id="components">
-
-  <!-- Button Row 1 -->
-  <div>
-    <label>Button Row 1:</label>
+  <div class="card">
+  
+    <div class="card-content">
     
-    <div>
-      <label>Button 1 Label:</label>  
-      <input type="text" id="button1Label">
-    </div>
-    
-    <div>
-     <label>Button 1 URL:</label>
-     <input type="url" id="button1URL"> 
-    </div>
-    
-    <div>
-      <label>Button 2 Label:</label>
-      <input type="text" id="button2Label">
-    </div>
-    
-    <div>
-     <label>Button 2 URL:</label>
-     <input type="url" id="button2URL">
+      <div class="input-field">
+        <input id="urlInput" type="url" required>
+        <label for="urlInput">Webhook URL</label>
+      </div>
+      
+      <div class="input-field">
+        <input id="embedTitle" type="text">
+        <label for="embedTitle">Title</label>
+      </div>
+
+      <div class="input-field">
+        <textarea id="embedDescription" class="materialize-textarea"></textarea>
+        <label for="embedDescription">Description</label>
+      </div>
+
+      <div class="input-field">
+        <input id="embedColor" type="text">
+        <label for="embedColor">Color</label>  
+      </div>
+      
+      <div class="input-field">
+        <input id="embedImage" type="text">
+        <label for="embedImage">Image URL</label>
+      </div>
+      
+      <div id="preview"></div>
+      
+      <button class="btn waves-effect waves-light" id="sendButton">
+        Send
+        <i class="material-icons right">send</i>
+      </button>
+      
     </div>
 
   </div>
 
-  <!-- Button Row 2 -->
-  <div>
-
-    <label>Button Row 2:</label>
-    
-    <div>
-      <label>Button 3 Label:</label>
-      <input type="text" id="button3Label"> 
-    </div>
-    
-    <div>
-     <label>Button 3 URL:</label>
-     <input type="url" id="button3URL">
-    </div>
-    
-    <div>
-      <label>Button 4 Label:</label>
-      <input type="text" id="button4Label">
-    </div>
-    
-    <div>
-     <label>Button 4 URL:</label>
-     <input type="url" id="button4URL">
-    </div>
-
-  </div>
-
-  <!-- Button Row 5 -->
-  <div>
-
-    <label>Button Row 5:</label>
-    
-    <div>
-      <label>Button 5 Label:</label>  
-      <input type="text" id="button5Label">
-    </div>
-    
-    <div>
-     <label>Button 5 URL:</label>
-     <input type="url" id="button5URL">
-    </div>
-
-  </div>
-
-</div>
   <script>
-    const sendButton = document.getElementById('sendButton');
-    const colorPicker = document.querySelector('.color-picker');
-
-    // Initialize Spectrum Color Picker
-    $(colorPicker).spectrum({
-      showInput: true,
-      showPalette: true,
-      preferredFormat: "hex",
-      showButtons: false,
-      chooseText: "Select",
-      cancelText: "Cancel",
-      palette: [
-        ["#0077cc", "#5e5e5e", "#e74c3c", "#2ecc71", "#3498db", "#f39c12", "#9b59b6", "#1abc9c"],
-        // Add more colors as needed
-      ]
-    });
-
-    sendButton.addEventListener('click', () => {
-      const url = document.getElementById('urlInput').value;
-
-      const embed = {
+    
+    // Get input values  
+    function getEmbedData() {
+    
+      return {
         title: document.getElementById('embedTitle').value,
         description: document.getElementById('embedDescription').value,
-        color: colorPicker.value || 0,
-        image: { url: document.getElementById('embedImage').value },
-        footer: {
-          text: document.getElementById('embedFooter').value,
-          icon_url: document.getElementById('embedFooterIcon').value
-        },
-        author: {
-          name: document.getElementById('embedAuthor').value,
-          icon_url: document.getElementById('embedAuthorIcon').value
-        },
-        fields: [
-          {
-            name: document.getElementById('embedField1Name').value,
-            value: document.getElementById('embedField1Value').value
-          },
-          // Add more fields as needed
-        ],
-      };
+        color: document.getElementById('embedColor').value, 
+        image: {
+          url: document.getElementById('embedImage').value  
+        }
+      }
+      
+    }
+    
+    // Preview embed
+    function previewEmbed() {
+    
+      let embed = getEmbedData();
+      
+      document.getElementById('preview').innerHTML = '';
+      
+      embedJS.render(document.getElementById('preview'), embed);
+      
+    }
+    
+    // Send webhook
+    function sendWebhook() {
 
+      let url = document.getElementById('urlInput').value;  
+      let embed = getEmbedData();
+      
       fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          embeds: [embed]
+          embeds: [embed]  
         })
       });
-    });
+      
+    }
+    
+    // Set up events
+    document.getElementById('sendButton').addEventListener('click', sendWebhook);
+    
+    document.getElementById('embedTitle').addEventListener('keyup', previewEmbed);
+    document.getElementById('embedDescription').addEventListener('keyup', previewEmbed);
+    document.getElementById('embedColor').addEventListener('change', previewEmbed);
+    document.getElementById('embedImage').addEventListener('change', previewEmbed);
+    
+    
   </script>
 
 </body>
+
 </html>
