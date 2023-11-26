@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webhook Sender</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Webhook Sender</h1>
+        <div id="embedBuilder">
+            <label for="username">Username:</label>
+            <input type="text" id="username" placeholder="Enter username">
+
+            <label for="message">Message:</label>
+            <textarea id="message" placeholder="Enter message"></textarea>
+
+            <button onclick="buildEmbed()">Build Embed</button>
+
+            <button onclick="sendWebhook()">Send Webhook</button>
+        </div>
+
+        <div id="embedPreview" class="hidden">
+            <h2>Embed Preview</h2>
+            <div id="previewContent"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
