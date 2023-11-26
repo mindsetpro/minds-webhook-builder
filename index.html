@@ -1,75 +1,121 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Webhook Sender</title>
-  
+
   <!-- Include embedding library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/embed-js/1.18.1/embed.min.js"></script>
-  
+
   <style>
-    /* Some basic styling */
     body {
-      font-family: Arial, sans-serif;  
+      font-family: Arial, sans-serif;
       max-width: 800px;
       margin: 0 auto;
+      background-color: #1e1e1e;
+      color: #fff;
     }
-    
-    textarea {
+
+    h1 {
+      color: #0077cc;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input, textarea {
       width: 100%;
-      height: 150px;
+      padding: 8px;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+      background-color: #2d2d2d;
+      border: 1px solid #444;
+      color: #fff;
     }
-    
+
+    textarea {
+      height: 150px;
+      resize: vertical;
+    }
+
     button {
-      padding: 10px 15px; 
+      padding: 10px 15px;
       background: #0077cc;
       color: #fff;
       border: none;
-      border-radius: 5px;  
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #005580;
+    }
+
+    #embedPreview {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #2d2d2d;
+      border: 1px solid #444;
+      border-radius: 5px;
     }
   </style>
-  
+
 </head>
 
 <body>
 
   <h1>Webhook Sender</h1>
-  
+
   <div>
     <label for="urlInput">Webhook URL:</label>
-    <input type="url" id="urlInput">
+    <input type="url" id="urlInput" placeholder="Enter webhook URL" required>
   </div>
-  
+
   <div>
     <label for="messageInput">Message:</label>
-    <textarea id="messageInput"></textarea>
+    <textarea id="messageInput" placeholder="Enter your message"></textarea>
   </div>
-  
+
   <div>
     <label for="embedInput">Embed JSON:</label>
-    <textarea id="embedInput"></textarea> 
+    <textarea id="embedInput" placeholder="Enter JSON for embed"></textarea>
   </div>
 
   <button id="sendButton">Send Message</button>
 
+  <div id="embedPreview"></div>
+
   <script>
     const sendButton = document.getElementById('sendButton');
-    
+    const embedPreview = document.getElementById('embedPreview');
+
     sendButton.addEventListener('click', () => {
-    
+
       const url = document.getElementById('urlInput').value;
       const message = document.getElementById('messageInput').value;
       const embed = document.getElementById('embedInput').value;
-      
-      // Send webhook with message and embed    
+
+      // Send webhook with message and embed
       fetch(url, {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},  
-        body: JSON.stringify({ 
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
           content: message,
           embeds: embed ? JSON.parse(embed) : undefined
         })
       });
-      
+
+      // Display embed preview
+      if (embed) {
+        embedPreview.innerHTML = `<h3>Embed Preview:</h3>${embed}`;
+        embedjs(embedPreview); // Use embed-js library to render the embed
+      } else {
+        embedPreview.innerHTML = '';
+      }
+
     });
   </script>
 
