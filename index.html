@@ -185,61 +185,66 @@
   <div id="embedPreview" class="embed-container"></div>
   <div id="errorMessage" class="error-message"></div>
 
-  <script>
-    const sendButton = document.getElementById('sendButton');
-    const embedPreview = document.getElementById('embedPreview');
-    const errorMessage = document.getElementById('errorMessage');
+<script>
+  const sendButton = document.getElementById('sendButton');
+  const embedPreview = document.getElementById('embedPreview');
+  const errorMessage = document.getElementById('errorMessage');
 
-    sendButton.addEventListener('click', async () => {
-      const url = document.getElementById('urlInput').value;
+  sendButton.addEventListener('click', async () => {
+    const url = document.getElementById('urlInput').value;
 
-      try {
-        const embed = {
-          title: document.getElementById('embedTitle').value,
-          description: document.getElementById('embedDescription').value,
-          color: document.getElementById('colorPicker').value,
-          image: { url: document.getElementById('embedImage').value },
-          footer: {
-            text: document.getElementById('embedFooter').value,
-            icon_url: document.getElementById('embedFooterIcon').value
+    try {
+      const embed = {
+        title: document.getElementById('embedTitle').value,
+        description: document.getElementById('embedDescription').value,
+        color: document.getElementById('colorPicker').value,
+        image: { url: document.getElementById('embedImage').value },
+        footer: {
+          text: document.getElementById('embedFooter').value,
+          icon_url: document.getElementById('embedFooterIcon').value
+        },
+        author: {
+          name: document.getElementById('embedAuthor').value,
+          icon_url: document.getElementById('embedAuthorIcon').value
+        },
+        fields: [
+          {
+            name: document.getElementById('embedField1Name').value,
+            value: document.getElementById('embedField1Value').value
           },
-          author: {
-            name: document.getElementById('embedAuthor').value,
-            icon_url: document.getElementById('embedAuthorIcon').value
-          },
-          fields: [
-            {
-              name: document.getElementById('embedField1Name').value,
-              value: document.getElementById('embedField1Value').value
-            },
-            // Add more fields as needed
-          ],
-        };
+          // Add more fields as needed
+        ],
+      };
 
-        // Use embed-js library to render the embed
-        embedjs(embedPreview, {
-          embeds: [embed]
-        });
+      // Use EmbedJS library to render the embed
+      EmbedJS(embedPreview, {
+        embeds: [embed]
+      });
 
-        // Send webhook with embed
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            embeds: [embed]
-          })
-        });
+      // Send webhook with embed in Discohook format
+      const payload = {
+        content: '',
+        username: '',
+        avatar_url: '',
+        embeds: [embed],
+      };
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
 
-        errorMessage.textContent = ''; // Clear any previous error messages
-      } catch (error) {
-        errorMessage.textContent = `Error: ${error.message}`;
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
-    });
-  </script>
+
+      errorMessage.textContent = ''; // Clear any previous error messages
+    } catch (error) {
+      errorMessage.textContent = `Error: ${error.message}`;
+    }
+  });
+</script>
 
 </body>
 </html>
