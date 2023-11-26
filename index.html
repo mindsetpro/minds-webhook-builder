@@ -7,6 +7,9 @@
 
   <!-- Include embedding library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/embed-js/1.18.1/embed.min.js"></script>
+  <!-- Include Spectrum Color Picker library -->
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.1/spectrum.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.1/spectrum.min.js"></script>
 
   <style>
     body {
@@ -31,7 +34,7 @@
       margin-bottom: 8px;
     }
 
-    input, textarea {
+    input, textarea, select {
       width: calc(100% - 16px);
       padding: 10px;
       margin-bottom: 15px;
@@ -43,7 +46,7 @@
       transition: background-color 0.3s;
     }
 
-    input:focus, textarea:focus {
+    input:focus, textarea:focus, select:focus {
       background-color: #4b4b4b;
     }
 
@@ -75,6 +78,14 @@
       border-radius: 5px;
     }
 
+    #components {
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #3b3b3b;
+      border: 1px solid #444;
+      border-radius: 5px;
+    }
+
   </style>
 
 </head>
@@ -83,18 +94,20 @@
 
   <h1>Webhook Sender</h1>
 
-  <div id="embedBuilder">
+  <div>
     <label for="urlInput">Webhook URL:</label>
     <input type="url" id="urlInput" placeholder="Enter webhook URL" required>
+  </div>
 
+  <div id="embedBuilder">
     <label for="embedTitle">Title:</label>
     <input type="text" id="embedTitle" placeholder="Enter title">
 
     <label for="embedDescription">Description:</label>
     <textarea id="embedDescription" placeholder="Enter description"></textarea>
 
-    <label for="embedColor">Color (Decimal):</label>
-    <input type="number" id="embedColor" placeholder="Enter color">
+    <label for="embedColor">Color:</label>
+    <input type="text" id="embedColor" placeholder="Select color" class="color-picker">
 
     <label for="embedImage">Image URL:</label>
     <input type="url" id="embedImage" placeholder="Enter image URL">
@@ -123,8 +136,96 @@
     <button id="sendButton">Send Embed</button>
   </div>
 
+<div id="components">
+
+  <!-- Button Row 1 -->
+  <div>
+    <label>Button Row 1:</label>
+    
+    <div>
+      <label>Button 1 Label:</label>  
+      <input type="text" id="button1Label">
+    </div>
+    
+    <div>
+     <label>Button 1 URL:</label>
+     <input type="url" id="button1URL"> 
+    </div>
+    
+    <div>
+      <label>Button 2 Label:</label>
+      <input type="text" id="button2Label">
+    </div>
+    
+    <div>
+     <label>Button 2 URL:</label>
+     <input type="url" id="button2URL">
+    </div>
+
+  </div>
+
+  <!-- Button Row 2 -->
+  <div>
+
+    <label>Button Row 2:</label>
+    
+    <div>
+      <label>Button 3 Label:</label>
+      <input type="text" id="button3Label"> 
+    </div>
+    
+    <div>
+     <label>Button 3 URL:</label>
+     <input type="url" id="button3URL">
+    </div>
+    
+    <div>
+      <label>Button 4 Label:</label>
+      <input type="text" id="button4Label">
+    </div>
+    
+    <div>
+     <label>Button 4 URL:</label>
+     <input type="url" id="button4URL">
+    </div>
+
+  </div>
+
+  <!-- Button Row 5 -->
+  <div>
+
+    <label>Button Row 5:</label>
+    
+    <div>
+      <label>Button 5 Label:</label>  
+      <input type="text" id="button5Label">
+    </div>
+    
+    <div>
+     <label>Button 5 URL:</label>
+     <input type="url" id="button5URL">
+    </div>
+
+  </div>
+
+</div>
   <script>
     const sendButton = document.getElementById('sendButton');
+    const colorPicker = document.querySelector('.color-picker');
+
+    // Initialize Spectrum Color Picker
+    $(colorPicker).spectrum({
+      showInput: true,
+      showPalette: true,
+      preferredFormat: "hex",
+      showButtons: false,
+      chooseText: "Select",
+      cancelText: "Cancel",
+      palette: [
+        ["#0077cc", "#5e5e5e", "#e74c3c", "#2ecc71", "#3498db", "#f39c12", "#9b59b6", "#1abc9c"],
+        // Add more colors as needed
+      ]
+    });
 
     sendButton.addEventListener('click', () => {
       const url = document.getElementById('urlInput').value;
@@ -132,7 +233,7 @@
       const embed = {
         title: document.getElementById('embedTitle').value,
         description: document.getElementById('embedDescription').value,
-        color: document.getElementById('embedColor').value || 0,
+        color: colorPicker.value || 0,
         image: { url: document.getElementById('embedImage').value },
         footer: {
           text: document.getElementById('embedFooter').value,
