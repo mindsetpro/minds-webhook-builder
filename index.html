@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <title>Mindsets Webhook Sender!</title>
+
+  <link rel="icon" href="https://dblegends.net/assets/card_icons/BChaIco_0573_GogetaSS1_573.webp">
+  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Webhook Sender</title>
@@ -149,14 +153,12 @@
 
   <button id="sendButton">Send Embed</button>
 
-  <div id="embedPreview">
-    <div class="embed-container" id="actualEmbedPreview"></div>
-  </div>
+  <div id="embedPreview" class="embed-container"></div>
 
   <script>
     const sendButton = document.getElementById('sendButton');
     const embedBuilder = document.getElementById('embedBuilder');
-    const actualEmbedPreview = document.getElementById('actualEmbedPreview');
+    const embedPreview = document.getElementById('embedPreview');
 
     sendButton.addEventListener('click', () => {
 
@@ -180,24 +182,12 @@
       };
 
       // Clear previous embed preview
-      actualEmbedPreview.innerHTML = '';
+      embedPreview.innerHTML = '';
 
-      // Create and append elements to display the actual embed preview
-      const embedTitle = document.createElement('div');
-      embedTitle.classList.add('embed-title');
-      embedTitle.textContent = embed.title || 'No Title';
-
-      const embedDescription = document.createElement('div');
-      embedDescription.classList.add('embed-description');
-      embedDescription.textContent = embed.description || 'No Description';
-
-      const embedFooter = document.createElement('div');
-      embedFooter.classList.add('embed-footer');
-      embedFooter.textContent = embed.footer.text || '';
-
-      actualEmbedPreview.appendChild(embedTitle);
-      actualEmbedPreview.appendChild(embedDescription);
-      actualEmbedPreview.appendChild(embedFooter);
+      // Use embed-js library to render the embed
+      embedjs(embedPreview, {
+        embeds: [embed]
+      });
 
       // Send webhook with embed
       fetch(url, {
