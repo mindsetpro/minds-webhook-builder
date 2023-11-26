@@ -54,6 +54,14 @@
       background: #005580;
     }
 
+    #embedBuilder {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #2d2d2d;
+      border: 1px solid #444;
+      border-radius: 5px;
+    }
+
     #embedPreview {
       margin-top: 15px;
       padding: 10px;
@@ -74,47 +82,77 @@
     <input type="url" id="urlInput" placeholder="Enter webhook URL" required>
   </div>
 
-  <div>
-    <label for="messageInput">Message:</label>
-    <textarea id="messageInput" placeholder="Enter your message"></textarea>
+  <div id="embedBuilder">
+    <label for="embedTitle">Title:</label>
+    <input type="text" id="embedTitle" placeholder="Enter title">
+
+    <label for="embedDescription">Description:</label>
+    <textarea id="embedDescription" placeholder="Enter description"></textarea>
+
+    <label for="embedColor">Color (Decimal):</label>
+    <input type="number" id="embedColor" placeholder="Enter color">
+
+    <label for="embedImage">Image URL:</label>
+    <input type="url" id="embedImage" placeholder="Enter image URL">
+
+    <label for="embedFooter">Footer:</label>
+    <input type="text" id="embedFooter" placeholder="Enter footer text">
+
+    <label for="embedFooterIcon">Footer Icon URL:</label>
+    <input type="url" id="embedFooterIcon" placeholder="Enter footer icon URL">
+
+    <label for="embedAuthor">Author:</label>
+    <input type="text" id="embedAuthor" placeholder="Enter author name">
+
+    <label for="embedAuthorIcon">Author Icon URL:</label>
+    <input type="url" id="embedAuthorIcon" placeholder="Enter author icon URL">
+
+    <!-- Add more fields as needed -->
+
   </div>
 
-  <div>
-    <label for="embedInput">Embed JSON:</label>
-    <textarea id="embedInput" placeholder="Enter JSON for embed"></textarea>
-  </div>
-
-  <button id="sendButton">Send Message</button>
+  <button id="sendButton">Send Embed</button>
 
   <div id="embedPreview"></div>
 
   <script>
     const sendButton = document.getElementById('sendButton');
+    const embedBuilder = document.getElementById('embedBuilder');
     const embedPreview = document.getElementById('embedPreview');
 
     sendButton.addEventListener('click', () => {
 
       const url = document.getElementById('urlInput').value;
-      const message = document.getElementById('messageInput').value;
-      const embed = document.getElementById('embedInput').value;
 
-      // Send webhook with message and embed
+      // Build embed object
+      const embed = {
+        title: document.getElementById('embedTitle').value,
+        description: document.getElementById('embedDescription').value,
+        color: document.getElementById('embedColor').value || 0,
+        image: { url: document.getElementById('embedImage').value },
+        footer: {
+          text: document.getElementById('embedFooter').value,
+          icon_url: document.getElementById('embedFooterIcon').value
+        },
+        author: {
+          name: document.getElementById('embedAuthor').value,
+          icon_url: document.getElementById('embedAuthorIcon').value
+        },
+        // Add more fields as needed
+      };
+
+      // Send webhook with embed
       fetch(url, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-          content: message,
-          embeds: embed ? JSON.parse(embed) : undefined
+          embeds: [embed]
         })
       });
 
       // Display embed preview
-      if (embed) {
-        embedPreview.innerHTML = `<h3>Embed Preview:</h3>${embed}`;
-        embedjs(embedPreview); // Use embed-js library to render the embed
-      } else {
-        embedPreview.innerHTML = '';
-      }
+      embedPreview.innerHTML = `<h3>Embed Preview:</h3>${JSON.stringify(embed, null, 2)}`;
+      embedjs(embedPreview); // Use embed-js library to render the embed
 
     });
   </script>
