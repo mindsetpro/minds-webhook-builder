@@ -1,49 +1,108 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mindsets Webhook Sender</title>
-    <link rel="stylesheet" href="styles.css">
+  <title>Webhook Sender</title>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- JS Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/iro.js/4.0.0/iro.min.js"></script>
+
 </head>
+
 <body>
-    <header>
-        <h1>Mindsets Webhook Sender</h1>
-    </header>
-    <main>
-        <form action="/send-webhook" method="post" class="webhook-form">
-            <div class="form-group">
-                <label for="webhook-url">Webhook URL:</label>
-                <input type="text" id="webhook-url" name="webhook-url" required>
-            </div>
 
-            <div class="form-group">
-                <label for="embed-title">Embed Title:</label>
-                <input type="text" id="embed-title" name="embed-title">
-            </div>
+  <!-- Header -->
 
-            <div class="form-group">
-                <label for="embed-description">Embed Description:</label>
-                <textarea id="embed-description" name="embed-description" rows="4"></textarea>
-            </div>
+  <header>
+    <h1>Webhook Sender</h1>
+  </header>
 
-            <div class="form-group">
-                <label for="embed-color" class="color-picker-label">Embed Color:</label>
-                <div class="color-picker"></div>
-                <input type="hidden" id="embed-color" name="embed-color" value="#3498db">
-            </div>
+  <!-- Main -->
 
-            <div class="form-group">
-                <label for="embed-fields">Embed Fields:</label>
-                <textarea id="embed-fields" name="embed-fields" rows="4" placeholder='Example: [{"name": "Field 1", "value": "Value 1", "inline": true}]'></textarea>
-            </div>
+<main>
 
-            <button type="submit">Send Embed</button>
-        </form>
-    </main>
+  <!-- Profile -->
+  
+  <div class="section profile">
+    <h3>Bot Profile</h3>
+    
+    <div class="form-control">
+      <label>Username</label>   
+      <input name="username"> 
+    </div>
+    
+    <div class="form-control">
+      <label>Avatar URL</label>    
+      <input type="url" name="avatarUrl">
+    </div>
+  </div>
 
-    <footer>
-        <p>&copy; Made by ^mind-set#0001</p>
-    </footer>
+  <!-- Message -->
+
+  <div class="section message">
+
+    <h3>Message</h3>  
+
+    <div class="form-control">
+      <label>Content</label>
+      <textarea name="content"></textarea>
+    </div>
+
+    <div class="form-control">
+      <label>Embed Title</label>
+      <input name="title">  
+    </div>
+
+    <!-- More embed fields -->
+  
+  </div>
+
+  <!-- Appearance -->
+  
+  <div class="section appearance">
+  
+    <h3>Appearance</h3>
+    
+    <div class="form-control">
+      <label>Color</label>    
+      <input type="color" name="color">
+    </div>
+    
+    <!-- More customization -->
+    
+    <div class="form-control">
+      <label>Thumbnail</label>  
+      <input type="url" name="thumbnail">
+    </div>
+    
+  </div>
+
+</main>
+
+    <!-- Preview -->
+
+    <div id="preview"></div>
+
+    <!-- Send button -->
+
+    <button id="submit">Send Webhook</button>
+
+  </main>
+  
+  <!-- Footer -->
+
+  <footer>
+    <p>&copy; Created by mindset</p>
+  </footer>
+
+  <!-- Script -->
+
+  <script src="script.js"></script>
+
 </body>
+
 </html>
