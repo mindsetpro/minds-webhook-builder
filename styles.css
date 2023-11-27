@@ -23,10 +23,14 @@ main {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-form {
+.webhook-form {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: 1fr;
     grid-gap: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
 }
 
 label {
@@ -40,7 +44,6 @@ input,
 textarea {
     width: 100%;
     padding: 12px;
-    margin-bottom: 15px;
     border: 1px solid #3498db;
     border-radius: 5px;
     background-color: #333333;
