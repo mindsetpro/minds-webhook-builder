@@ -3,37 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mindsets webhook sender</title>
+    <title>Mindsets Webhook Sender</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>mindsets webhook sender!</h1>
+        <h1>Mindsets Webhook Sender</h1>
     </header>
-<main>
-    <form action="/send-webhook" method="post">
-        <label for="webhook-url">Webhook URL:</label>
-        <input type="text" id="webhook-url" name="webhook-url" required>
-        
-        <label for="embed-title">Embed Title:</label>
-        <input type="text" id="embed-title" name="embed-title">
-        
-        <label for="embed-description">Embed Description:</label>
-        <textarea id="embed-description" name="embed-description" rows="4"></textarea>
-        
-        <label for="embed-color" class="color-picker-label">Embed Color:</label>
-        <div class="color-picker"></div>
-        <input type="hidden" id="embed-color" name="embed-color" value="#3498db">
-        
-        <label for="embed-fields">Embed Fields:</label>
-        <textarea id="embed-fields" name="embed-fields" rows="4" placeholder='Example: [{"name": "Field 1", "value": "Value 1", "inline": true}]'></textarea>
-        
-        <button type="submit">Send Embed</button>
-    </form>
-</main>
+    <main>
+        <form action="/send-webhook" method="post" class="webhook-form">
+            <div class="form-group">
+                <label for="webhook-url">Webhook URL:</label>
+                <input type="text" id="webhook-url" name="webhook-url" required>
+            </div>
+
+            <div class="form-group">
+                <label for="embed-title">Embed Title:</label>
+                <input type="text" id="embed-title" name="embed-title">
+            </div>
+
+            <div class="form-group">
+                <label for="embed-description">Embed Description:</label>
+                <textarea id="embed-description" name="embed-description" rows="4"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="embed-color" class="color-picker-label">Embed Color:</label>
+                <div class="color-picker"></div>
+                <input type="hidden" id="embed-color" name="embed-color" value="#3498db">
+            </div>
+
+            <div class="form-group">
+                <label for="embed-fields">Embed Fields:</label>
+                <textarea id="embed-fields" name="embed-fields" rows="4" placeholder='Example: [{"name": "Field 1", "value": "Value 1", "inline": true}]'></textarea>
+            </div>
+
+            <button type="submit">Send Embed</button>
+        </form>
+    </main>
 
     <footer>
-        <p>&copy; made by ^mind-set#0001</p>
+        <p>&copy; Made by ^mind-set#0001</p>
     </footer>
 </body>
 </html>
